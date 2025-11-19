@@ -151,6 +151,10 @@ namespace institute_system
             }
         }
 
+        private void uplodbtn_Click(object sender, EventArgs e)
+        {
+            Statistics();
 
+        }
     }
 }
