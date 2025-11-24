@@ -49,7 +49,6 @@ namespace institute_system
         {
             getTrainData();
             disbtns();
-            getTrainData();
             setupcompo();
            
 
@@ -186,6 +185,8 @@ namespace institute_system
                     cmd.Parameters.AddWithValue("@Email", txtmail.Text.Trim());
                     cmd.Parameters.AddWithValue("@Address", txtaddrs.Text.Trim());
                     cmd.Parameters.AddWithValue("@PhotoPath", currentPhotoPath);
+                    cmd.Parameters.AddWithValue("@RegistrationDate", dtprgster.Value);
+
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("تم الاضافه بنجاح");
@@ -365,7 +366,7 @@ namespace institute_system
                         conn.Open();
                         string query = @"UPDATE Trainees SET 
                            FullName = @FullName, Gender = @Gender, BirthDate = @BirthDate,
-                           Phone = @Phone, Email = @Email, Address = @Address, PhotoPath = @PhotoPath
+                           Phone = @Phone, Email = @Email, Address = @Address, PhotoPath = @PhotoPath ,RegistrationDate=@RegistrationDate
                            WHERE TraineeID = @TraineeID";
 
                         SqlCommand cmd = new SqlCommand(query, conn);
@@ -377,8 +378,10 @@ namespace institute_system
                         cmd.Parameters.AddWithValue("@Email", txtmail.Text.Trim());
                         cmd.Parameters.AddWithValue("@Address", txtaddrs.Text.Trim());
                         cmd.Parameters.AddWithValue("@PhotoPath", currentPhotoPath);
+                       cmd.Parameters.AddWithValue("@RegistrationDate", dtprgster.Value);
 
-                        cmd.ExecuteNonQuery();
+
+                    cmd.ExecuteNonQuery();
 
                         MessageBox.Show("تم تعديل بيانات المتدرب بنجاح");
                         getTrainData();
@@ -460,34 +463,41 @@ namespace institute_system
 
         private void txtmail_KeyPress(object sender, KeyPressEventArgs e)
         {
-          
+           
+            
+
         }
 
         private void txtphn_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '+' && e.KeyChar != '-')
-            {
+            if (e.KeyChar < 48 || e.KeyChar > 57)
                 e.Handled = true;
-            }
-
-            if (e.KeyChar == '+' && txtphn.Text.Length > 0)
-            {
-                e.Handled = true;
-            }
-
+            if (e.KeyChar == 8)
+                e.Handled = false;
         }
 
         private void txtname_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ' && e.KeyChar != '.')
-            {
-                e.Handled = true;
-            }
+            
+                if ((e.KeyChar < 65 || e.KeyChar > 90) &&       
+                    (e.KeyChar < 97 || e.KeyChar > 122) &&      
+                    (e.KeyChar < 1570 || e.KeyChar > 1610) &&   
+                    e.KeyChar != 32 &&                          
+                    e.KeyChar != 8)                             
+                {
+                    e.Handled = true;
+                }
+            
+        }
 
-            if (char.IsDigit(e.KeyChar) || char.IsSymbol(e.KeyChar) || char.IsPunctuation(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+        private void btnsave_MouseHover(object sender, EventArgs e)
+        {
+            btnsave.BackColor = Color.Green;
+        }
+
+        private void btnsave_MouseLeave(object sender, EventArgs e)
+        {
+            btnsave.BackColor = Color.White;
 
         }
     }
